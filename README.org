@@ -1,0 +1,16 @@
+* sdt - my omz theme
+	- customized prompt
+	- and `LSCOLORS'
+* Expection
+#+begin_example
+user >> ~/path git(BRANCH -> REMOTE ^n_m !) <INPUT>
+#+end_example
+	- ^ :: ahead
+	- _ :: behind
+	- * :: untacked files
+	- , :: staged but not commited yet
+	- + :: modified files
+	- ? :: conficted files
+	- @ :: stash
+	- ! :: "dirty" directory
+	- . :: "clean" directory

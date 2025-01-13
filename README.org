@@ -14,3 +14,14 @@ user >> ~/path git(BRANCH -> REMOTE ^n_m !) <INPUT>
 	- @ :: stash
 	- ! :: "dirty" directory
 	- . :: "clean" directory
+* install
+	1. clone this repo
+		#+begin_src shell
+		git clone "https://github.com/sdlea/omz-theme-sdt.git"
+		#+end_src
+	2. run install.sh
+		#+begin_src shell
+		./install
+		#+end_src
+		- please make sure this script haing excutable permission.
+		- please confirm omz custom directory before it cp theme file into it.

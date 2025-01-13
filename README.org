@@ -1,19 +1,20 @@
 * sdt - my omz theme
+	inspired by robbyrussell theme
 	- customized prompt
-	- and `LSCOLORS'
+	- and `LS_COLORS'
 * Expection
 #+begin_example
-user >> ~/path git(BRANCH -> REMOTE ^n_m !) <INPUT>
+user >> ~/path git(BRANCH -> REMOTE INFO [!.]) <INPUT>
 #+end_example
-	- ^ :: ahead
-	- _ :: behind
-	- * :: untacked files
-	- , :: staged but not commited yet
-	- + :: modified files
-	- ? :: conficted files
-	- @ :: stash
+	- ^NUM :: ahead
+	- _NUM(underscore) :: behind
+	- *NUM :: untacked files
+	- ,NUM :: staged but not commited yet
+	- +NUM :: modified files
+	- ?NUM :: conficted files
+	- @NUM :: stash
 	- ! :: "dirty" directory
-	- . :: "clean" directory
+	- .(period) :: "clean" directory
 * install
 	1. clone this repo
 		#+begin_src shell

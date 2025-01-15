@@ -38,3 +38,22 @@ target="${ZSH_CUSTOM}"/themes
 [[ -d $target ]] || mkdir -p "$target"
 
 cp "$tfile" "$target/"
+echo "theme file is copied"
+
+echo "Would you like to use this theme?"
+read -r cnfm
+if [[ "$cnfm" = "y" ]]; then
+	sed -i 's/\(^[[:space:]]*ZSH_THEME="\)\([^"]\{1,\}\)\(".*\)/\1sdt\3/' ${rcfile}
+	echo "replaced,\nNow would you like to \`source' zshrc?"
+	read -r cnfm
+	if [[ "$cnfm" == "y" ]]; then
+		source $rcfile
+		echo "DONE"
+	else
+		echo "Not [y] key, abort"
+		return 0
+	fi
+else
+	echo "Not [y] key, abort"
+	return 0
+fi

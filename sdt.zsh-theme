@@ -1,15 +1,9 @@
 PROMPT="%(?:%{$fg_bold[green]%}%n%1{ >>%} :%{$fg_bold[red]%}%n%1{ x>%}) %{$fg[cyan]%}%2~ %{$reset_color%}"
 
 # git(<BRANCH> ^n_m +x ,y !)
-# ^ ahead
-# _ behind
-# * untrakced
-# , staged
-# + modified
-# ? conflicts
-# @ stash
-# ! dirty 
-# . clean
+# ^ :: ahead	_ :: behind	* :: untrakced
+# , :: staged	+ :: modified	? :: conflicts
+# @ stash	! :: dirty 	. :: clean
 ZSH_THEME_GIT_SHOW_UPSTREAM=1
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
@@ -23,21 +17,11 @@ function __git_prompt_git() {
 	GIT_OPTIONAL_LOCKS=0 command git "$@"
 }
 
-function __git_counter() {
-	local prefix
-	prefix=$1
-	local suffix
-	suffix=$2
-	shift 2
-
-	local cnt
-	cnt=$(__git_prompt_git "$@" | wc -l)
-	if [[ -n "$cnt" && "$cnt" != 0 ]]; then
-		cnt="$prefix$cnt$suffix"
-	else
-		cnt=""
+function __concat() {
+	if [[ -n "$2" && "$2" != 0 && ! "$2" =~ "^[[:space:]]*$" ]]; then
+		printf "%s" "$@"
 	fi
-	printf "%s" $cnt
+	return 0
 }
 
 function git_prompt_info () {
@@ -65,33 +49,15 @@ function git_prompt_info () {
 		&& upstream=" -> ${upstream%/*}"
 	fi
 
-	local untrck
-	untrck=$(__git_counter "*" "" ls-files --others --exclude-standard)
-	
-	local stged
-	stged=$(__git_counter "," "" diff --cached --name-only 2>/dev/null)
-
-	local modifiedf
-	modifiedf=$(__git_counter "+" "" status --porcelain | grep "^ M")
-
-	local cnflcts
-	cnflcts=$(__git_counter "?" "" status --porcelain | grep "^U")
-
-	local stsh
-	stsh=$(__git_counter "@" "" stash list)
-
 	local dtls
-	if [[ -n "$untrck" \
-	|| -n "$stged" \
-	|| -n "$modifiedf" \
-	|| -n "$stsh" ]]; then 
-		dtls=" ";
-		dtls+="$(git_commits_ahead)$(git_commits_behind)";
-		dtls+="${stged}${modifiedf}${cnflcts}${untrck}";
-		dtls+="${stsh}";
-	else
-		dtls=""
-	fi
+	dtls=$(__concat " " \
+		$(git_commits_ahead) \
+		$(git_commits_behind) \
+		$(__concat "+" $(printf "%s" "$(__git_prompt_git status --porcelain=v1)" | grep "^ M" | wc -l)) \
+		$(__concat "?" $(printf "%s" "$(__git_prompt_git status --porcelain=v1)" | grep "^U" | wc -l)) \
+		$(__concat "*" $(printf "%s" "$(__git_prompt_git status --porcelain=v1)" | grep "^??" | wc -l)) \
+		$(__concat "@" $(printf "%s" "$(__git_prompt_git stash list)" | wc -l)) \
+	)
 
 	echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref:gs/%/%%}${upstream:gs/%/%%}${dtls}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }

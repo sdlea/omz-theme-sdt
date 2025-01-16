@@ -23,9 +23,11 @@ user >> ~/path git(BRANCH -> REMOTE INFO [!.]) <INPUT>
 		#+begin_src shell
 		git clone "https://github.com/sdlea/omz-theme-sdt.git"
 		#+end_src
-	2. run install.sh
+	2. copy sdt.zsh-theme file to $ZSH_CUSTOM/themes, then change zshrc file.
+	3. or run install.sh
 		#+begin_src shell
-		./install
+		. ./install
 		#+end_src
 		- please make sure this script haing excutable permission.
 		- please confirm omz custom directory before it cp theme file into it.
+		- this script will owverwrite the existing theme file with same name.
